@@ -19,16 +19,18 @@ app.use(express.static(distDir));
 console.log("Loadingdummy data...");
 LOCAL_PORT = 3000;
 
-//registerRoutes();
+let manageError = (res, reason, message, code) => {
+    console.log("Error: " + reason);
+    res.status(code || 500).json({ "error": message });
+}
+
+app.set("errManager", manageError);
+require("./startup/mainRouter")(app);
 
 var server = app.listen(process.env.PORT || LOCAL_PORT, function () {
     var port = server.address().port;
     console.log("veterinaria-back now running on port ", port);
 });
 
-/*
-let registerRoutes = () => {
-    require('./users')(app, database);
-    require('./auth')(app, database);
-}
-*/
+
+
