@@ -1,7 +1,5 @@
 module.exports = function (app) {
-
-    
-    //var authRoute = require("../routes/auth/auth");
+    var authRoute = require("../routes/auth/auth");
     var citaRoute = require("../routes/cita/cita");
     var clienteRoute = require("../routes/cliente/cliente");
     var insumoRoute = require("../routes/insumo/insumo");
@@ -13,7 +11,7 @@ module.exports = function (app) {
     var statusRoute = require("../routes/status/status");
     var usuarioRoute = require("../routes/usuario/usuario");
     
-    //app.use("/api/auth", authRoute);
+    app.use("/api/auth", authRoute);
     app.use("/api/cita", citaRoute);
     app.use("/api/cliente", clienteRoute);
     app.use("/api/insumo", insumoRoute);
