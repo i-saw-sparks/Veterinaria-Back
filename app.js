@@ -11,12 +11,13 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 
-var mysql      = require('mysql');
+var mysql = require('mysql');
 
 var connection = mysql.createConnection({
-  host     : 'localhost',
-  user     : 'root',
-  password : ''
+    host: 'localhost',
+    user: 'root',
+    password: '',
+    database: "veterinaria"
 });
 
 app.use(cors({}))
@@ -36,16 +37,16 @@ require("./startup/mainRouter")(app);
 
 console.log("Connecting to the database...");
 connection.connect((err) => {
-    if(err){
+    if (err) {
         console.log("Error connecting to the database");
-    }else{
+    } else {
         console.log("Connected to the database");
         app.set("db", connection);
         var server = app.listen(process.env.PORT || LOCAL_PORT, function () {
             var port = server.address().port;
             console.log("veterinaria-back now running on port ", port);
         });
-        
+
     }
 });
 

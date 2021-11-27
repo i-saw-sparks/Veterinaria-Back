@@ -11,14 +11,14 @@ module.exports = function (app) {
     var statusRoute = require("../routes/status/status");
     var usuarioRoute = require("../routes/usuario/usuario");
     
-    app.use("/api/auth", authRoute);
-    app.use("/api/cita", citaRoute);
-    app.use("/api/cliente", clienteRoute);
-    app.use("/api/insumo", insumoRoute);
-    app.use("/api/mascota", mascotaRoute);
-    app.use("/api/producto", productoRoute);
-    app.use("/api/proveedor", proveedorRoute);
-    app.use("/api/registro", registroRoutes);
-    app.use("/api/status", statusRoute);
-    app.use("/api/usuario", usuarioRoute);
+    app.use("/apiOs/auth", authRoute);
+    app.use("/apiOs/cita", citaRoute);
+    app.use("/apiOs/cliente", clienteRoute);
+    app.use("/apiOs/insumo", insumoRoute);
+    app.use("/apiOs/mascota", mascotaRoute);
+    app.use("/apiOs/producto", productoRoute);
+    app.use("/apiOs/proveedor", proveedorRoute);
+    app.use("/apiOs/registro", registroRoutes);
+    app.use("/apiOs/status", statusRoute);
+    app.use("/apiOs/usuario", usuarioRoute);
   };
