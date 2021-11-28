@@ -49,7 +49,6 @@ app.post("/", (req, res) => {
                         if (err) {
                             req.app.get("errManager")(res, err.message, "Failed to insert user.");
                         } else {
-                            console.log(result);
                             res.status(200).json({ msg: "Usuario insertado con exito" });
                         }
                     });
