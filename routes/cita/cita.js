@@ -21,7 +21,6 @@ app.delete("/:id", (req, res) =>{
             }else{
                 res.status(200).json({msg:"Cita eliminada con exito"})
             }
-            
         }
     })
 })

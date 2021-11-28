@@ -21,6 +21,20 @@ app.get("/:id_mascota", (req, res) =>{
     })
 })
 
+app.delete("/:id", (req, res) =>{
+    req.app.get("db").query('DELETE FROM registro_medico WHERE id=' + req.params.id, (err, rows) =>{
+        if(err){
+            req.app.get("errManager")(res, err.message, "Failed to delete registo medico.");
+        }else{
+            if(rows.affectedRows == 0){
+                res.status(400).json({msg:"Registro medico a eliminar no encontrado"});
+            }else{
+                res.status(200).json({msg:"Registro medico eliminado con exito"})
+            }
+        }
+    })
+})
+
 app.post("/", (req, res) => {
     let data = req.body;
     if (!data.descripcion) {

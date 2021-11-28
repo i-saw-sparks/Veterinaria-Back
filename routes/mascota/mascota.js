@@ -11,6 +11,20 @@ app.get("/", function (req, res) {
     })
 });
 
+app.delete("/:id", (req, res) =>{
+    req.app.get("db").query('DELETE FROM mascotas WHERE id=' + req.params.id, (err, rows) =>{
+        if(err){
+            req.app.get("errManager")(res, err.message, "Failed to delete mascota.");
+        }else{
+            if(rows.affectedRows == 0){
+                res.status(400).json({msg:"Mascota a eliminar no encontrado"});
+            }else{
+                res.status(200).json({msg:"Mascota eliminado con exito"})
+            }
+        }
+    })
+})
+
 app.post("/", (req, res) => {
     let data = req.body;
     if (!data.nombre) {
