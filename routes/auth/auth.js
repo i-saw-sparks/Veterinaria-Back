@@ -18,6 +18,11 @@ app.post("/", function (req, res) {
     }
 
     req.app.get("db").query("SELECT * FROM usuarios WHERE nombre = '" + data.nombre + "'", (err, rows) => {
+        if(err){
+            req.app.get("errManager")(res, err.message, "Failed to auth, server error.");
+            return
+        }
+
         if (rows.length == 0) {
             res.status(403).json({ msg: "User not found", status: 0 });
             return;
