@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 
-app.get("/", function (req, res) {
+app.get("/", (req, res) => {
     req.app.get("db").query('SELECT * FROM citas', (err, rows) =>{
         if(err){
             req.app.get("errManager")(res, err.message, "Failed to get citas.");
@@ -10,6 +10,21 @@ app.get("/", function (req, res) {
         }
     })
 });
+
+app.delete("/:id", (req, res) =>{
+    req.app.get("db").query('DELETE FROM citas WHERE id=' + req.params.id, (err, rows) =>{
+        if(err){
+            req.app.get("errManager")(res, err.message, "Failed to delete cita.");
+        }else{
+            if(rows.affectedRows == 0){
+                res.status(400).json({msg:"Cita a eliminar no encontrada"});
+            }else{
+                res.status(200).json({msg:"Cita eliminada con exito"})
+            }
+            
+        }
+    })
+})
 
 app.post("/", (req, res) => {
     let data = req.body;
