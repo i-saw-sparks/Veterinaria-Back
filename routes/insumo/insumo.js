@@ -2,9 +2,13 @@ const express = require('express');
 const app = express();
 
 app.get("/", function (req, res) {
-    //Consulta a base de datos
-    let dummy = require("./insumo_model").insumoDummy;
-    res.status(200).json(dummy);
+    req.app.get("db").query('SELECT * FROM insumos_medicos', (err, rows) =>{
+        if(err){
+            req.app.get("errManager")(res, err.message, "Failed to get insumos medicos.");
+        }else{
+            res.status(200).json(rows);
+        }
+    })
 });
 
 module.exports = app;

@@ -1,49 +1,43 @@
 const { JWT_KEY } = require("../../keys/keys");
+const bcrypt = require("bcryptjs");
+var jwt = require("jsonwebtoken");
 
 const express = require('express');
 const app = express();
 
-app.get("/", function (req, res) {
-    var user = req.body;
+app.post("/", function (req, res) {
+    var data = req.body;
 
-    if (!user.name) {
-        res.status(400).json({ msg: "Invalid input, name is mandatory" });
+    if (!data.nombre) {
+        res.status(400).json({ msg: "Invalid input, nombre is mandatory" });
         return;
     }
-    if (!user.password) {
-        res.status(400).json({ msg: "Invalid input, password is mandatory" });
+    if (!data.contrasenia) {
+        res.status(400).json({ msg: "Invalid input, contrasenia is mandatory" });
         return
     }
 
-    //Se realizará consulta a base de datos
-    data = {
-        id: 1,
-        nombre: "Emmanuel Garza Flores",
-        horario: "9:00,15:00",
-        tipo: "ADMIN",
-        permisos: "ADMIN",
-        contrasenia: "3746gGG8r734"
-    }
-
-    if (!data) {
-        res.status(403).json({ msg: "User not found", status: 0 });
-        return;
-    }
-    bcrypt.compare(user.password, data.password, (err, result) => {
-        if (err) {
-            req.app.get("errManager")(res, err.message, "Failed to auth user, internal error.");
+    req.app.get("db").query("SELECT * FROM usuarios WHERE nombre = '" + data.nombre + "'", (err, rows) => {
+        if (rows.length == 0) {
+            res.status(403).json({ msg: "User not found", status: 0 });
             return;
         }
-        if (result) {
-            let token = jwt.sign({ name: data.nombre, id: data.id, privilege: data.permisos }, JWT_KEY);
-            res.status(200).json({ msg: "Auth completed", status: 1, token: token });
-            return;
-        } else {
-            res.status(403).json({ msg: "Auth failed", status: 0 });
-            return;
-        }
+        //console.log(rows[0].contrasenia);
+        bcrypt.compare(data.contrasenia, rows[0].contrasenia, (err, result) => {
+            if (err) {
+                req.app.get("errManager")(res, err.message, "Failed to auth user, internal error.");
+                return;
+            }
+            if (result) {
+                let token = jwt.sign({ id: data.id, permisos: data.permisos, tipo_usuario: data.tipo_usuario }, JWT_KEY);
+                res.status(200).json({ msg: "Auth completed", token: token });
+                return;
+            } else {
+                res.status(403).json({ msg: "Auth failed", status: 0 });
+                return;
+            }
+        })
     })
-
 
 });
 
