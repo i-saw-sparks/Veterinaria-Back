@@ -18,7 +18,7 @@ app.post("/", function (req, res) {
     }
 
     req.app.get("db").query("SELECT * FROM usuarios WHERE nombre = '" + data.nombre + "'", (err, rows) => {
-        if(err){
+        if (err) {
             req.app.get("errManager")(res, err.message, "Failed to auth.");
             return
         }
@@ -27,15 +27,15 @@ app.post("/", function (req, res) {
             res.status(403).json({ msg: "User not found", status: 0 });
             return;
         }
-        //console.log(rows[0].contrasenia);
+
         bcrypt.compare(data.contrasenia, rows[0].contrasenia, (err, result) => {
             if (err) {
                 req.app.get("errManager")(res, err.message, "Failed to auth user, internal error.");
                 return;
             }
             if (result) {
-                let token = jwt.sign({ id: data.id, permisos: data.permisos, tipo_usuario: data.tipo_usuario }, JWT_KEY);
-                res.status(200).json({ msg: "Auth completed", token: token });
+                let token = jwt.sign({ userid: data.nombre }, JWT_KEY);
+                res.status(200).json({ msg: "Auth completed", token: token, userid: data.nombre, tipo_usuario: rows[0].tipo_usuario });
                 return;
             } else {
                 res.status(403).json({ msg: "Auth failed", status: 0 });
