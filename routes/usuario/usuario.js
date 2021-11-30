@@ -22,6 +22,21 @@ app.get("/:id", (req, res) =>{
     })
 })
 
+app.put("/", (req, res)=>{
+    let body = req.body;
+    req.app.get("db").query(`UPDATE usuarios SET nombre='${body.nombre}', contrasenia='${body.contrasenia}', horario='${body.horario}', tipo_usuario='${body.tipo_usuario}', permisos='${body.permisos}' WHERE id = '${body.id}'`, (err, rows) => {
+        if (err) {
+            req.app.get("errManager")(res, err.message, "Failed to update usuario.");
+        } else {
+            if(rows.affectedRows == 1){
+                res.status(200).json({msg:"Usuario editado con exito"});
+            }else{
+                res.status(400).json({msg:"Error al editar el usuario"});
+            }
+        }
+    })
+})
+
 app.delete("/:id", (req, res) =>{
     req.app.get("db").query('DELETE FROM usuarios WHERE id=' + req.params.id, (err, rows) =>{
         if(err){
