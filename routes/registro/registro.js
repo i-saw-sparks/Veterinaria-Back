@@ -21,6 +21,21 @@ app.get("/:id_mascota", (req, res) =>{
     })
 })
 
+app.put("/", (req, res)=>{
+    let body = req.body;
+    req.app.get("db").query(`UPDATE registro_medico SET descripcion='${body.descripcion}', fecha='${body.fecha}' WHERE id = '${body.id}'`, (err, rows) => {
+        if (err) {
+            req.app.get("errManager")(res, err.message, "Failed to update registro medico.");
+        } else {
+            if(rows.affectedRows == 1){
+                res.status(200).json({msg:"Registro medico editado con exito"});
+            }else{
+                res.status(400).json({msg:"Error al editar el registro medico"});
+            }
+        }
+    })
+})
+
 app.delete("/:id", (req, res) =>{
     req.app.get("db").query('DELETE FROM registro_medico WHERE id=' + req.params.id, (err, rows) =>{
         if(err){
