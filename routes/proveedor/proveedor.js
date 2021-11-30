@@ -21,6 +21,21 @@ app.get("/:id", (req, res) =>{
     })
 })
 
+app.put("/", (req, res)=>{
+    let body = req.body;
+    req.app.get("db").query(`UPDATE proveedores SET nombre='${body.nombre}', direccion='${body.direccion}', telefono='${body.telefono}', correo='${body.correo}', descripcion='${body.descripcion}' WHERE id = '${body.id}'`, (err, rows) => {
+        if (err) {
+            req.app.get("errManager")(res, err.message, "Failed to update proveedor.");
+        } else {
+            if(rows.affectedRows == 1){
+                res.status(200).json({msg:"Proveedor editado con exito"});
+            }else{
+                res.status(400).json({msg:"Error al editar el proveedor"});
+            }
+        }
+    })
+})
+
 app.delete("/:id", (req, res) =>{
     req.app.get("db").query('DELETE FROM proveedores WHERE id=' + req.params.id, (err, rows) =>{
         if(err){
