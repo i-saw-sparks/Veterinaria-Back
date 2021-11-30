@@ -11,6 +11,16 @@ app.get("/", (req, res) => {
     })
 });
 
+app.get("/:id", (req, res) =>{
+    req.app.get("db").query('SELECT * FROM clientes WHERE id=' + req.params.id, (err, rows) =>{
+        if(err){
+            req.app.get("errManager")(res, err.message, "Failed to get cliente.");
+        }else{
+            res.status(200).json(rows[0]);
+        }
+    })
+})
+
 app.delete("/:id", (req, res) =>{
     req.app.get("db").query('DELETE FROM clientes WHERE id=' + req.params.id, (err, rows) =>{
         if(err){
