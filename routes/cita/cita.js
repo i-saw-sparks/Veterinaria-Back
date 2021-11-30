@@ -77,7 +77,6 @@ app.post("/", (req, res) => {
         return;
     }
 
-
     req.app.get("db").query("INSERT INTO citas " +
         "(fecha, hora_inicio, hora_fin, tipo, id_usuario, id_mascota) VALUES" +
         "('" + data.fecha + "','" + data.hora_inicio + "','" + data.hora_fin + "','" + data.tipo + "'," + data.id_usuario + "," + data.id_mascota + ")"

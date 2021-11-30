@@ -21,6 +21,21 @@ app.get("/:id", (req, res) =>{
     })
 })
 
+app.put("/", (req, res)=>{
+    let body = req.body;
+    req.app.get("db").query(`UPDATE clientes SET nombre='${body.nombre}', telefono='${body.telefono}', direccion='${body.direccion}', email='${body.email}' WHERE id = '${body.id}'`, (err, rows) => {
+        if (err) {
+            req.app.get("errManager")(res, err.message, "Failed to get cliente.");
+        } else {
+            if(rows.affectedRows == 1){
+                res.status(200).json({msg:"Cliente editado con exito"});
+            }else{
+                res.status(400).json({msg:"Error al editar el cliente"});
+            }
+        }
+    })
+})
+
 app.delete("/:id", (req, res) =>{
     req.app.get("db").query('DELETE FROM clientes WHERE id=' + req.params.id, (err, rows) =>{
         if(err){
